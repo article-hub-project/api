@@ -1,0 +1,11 @@
+.idea/
+.vs/
+
+/ArticleHub/BLL/obj
+/ArticleHub/BLL/bin
+/ArticleHub/DAL/bin
+/ArticleHub/DAL/obj
+/ArticleHub/PL/bin
+/ArticleHub/PL/obj
+.idea
+.vs
