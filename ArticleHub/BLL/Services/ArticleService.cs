@@ -20,6 +20,11 @@ namespace BLL.Services
             return await _articleRepository.GetAsync();
         }
 
+        public async Task<IEnumerable<Article>> GetTopAsync(int top)
+        {
+            return await _articleRepository.GetTopAsync(top);
+        }
+
         public async Task<Article?> CreateAsync(Article article)
         {
             var currentUserId = _authService.GetCurrentUserId();

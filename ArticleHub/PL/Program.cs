@@ -14,11 +14,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<MongoDBConfiguration>(builder.Configuration.GetSection(nameof(MongoDBConfiguration)));
 builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(nameof(JwtConfiguration)));
+builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection(nameof(RedisConfiguration)));
 
 builder.Services.AddSingleton(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IOptions<MongoDBConfiguration>>().Value;
     return new MongoDBContext(configuration.ConnectionString, configuration.DatabaseName);
+});
+
+builder.Services.AddSingleton(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IOptions<RedisConfiguration>>().Value;
+    return new CacheService(configuration.ConnectionString);
 });
 
 builder.Services.AddAuthentication(options =>

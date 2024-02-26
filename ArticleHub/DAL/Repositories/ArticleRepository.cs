@@ -19,6 +19,12 @@ namespace DAL.Repositories
             return await _dbContext.Articles.Find(_ => true).ToListAsync();
         }
 
+        public async Task<IEnumerable<Article>> GetTopAsync(int top)
+        {
+            var sortDefinition = Builders<Article>.Sort.Descending("PublishedDate");
+            return await _dbContext.Articles.Find(_ => true).Sort(sortDefinition).Limit(top).ToListAsync();
+        }
+
         public async Task CreateAsync(Article article)
         {
             await _dbContext.Articles.InsertOneAsync(article);
