@@ -20,8 +20,5 @@ namespace BLL.Entities
 
         [BsonElement("Modules")]
         public List<Module> Modules { get; set; }
-
-        [BsonElement("Tags")]
-        public List<string> Tags { get; set; }
     }
 }

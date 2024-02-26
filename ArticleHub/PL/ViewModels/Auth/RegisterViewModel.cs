@@ -2,6 +2,7 @@
 {
     public record RegisterViewModel(
         string Email,
-        string Password
+        string Password,
+        string Username
         );
 }

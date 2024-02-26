@@ -1,8 +1,8 @@
-﻿using BLL.Entities;
+﻿using AutoMapper;
 using BLL.Interfaces.Services;
-using DAL.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+using PL.ViewModels.Article;
 using PL.ViewModels.Auth;
 
 namespace PL.Controllers
@@ -12,15 +12,18 @@ namespace PL.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService context)
+        private readonly IMapper _mapper;
+
+        public AuthController(IAuthService authService, IMapper mapper)
         {
-            _authService = context;
+            _authService = authService;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register([FromBody] RegisterViewModel model)
         {
-            var accessToken = await _authService.RegisterAsync(model.Email, model.Password);
+            var accessToken = await _authService.RegisterAsync(model.Email, model.Password, model.Username);
             if (string.IsNullOrEmpty(accessToken))
                 return BadRequest();
 
@@ -35,6 +38,17 @@ namespace PL.Controllers
                 return BadRequest();
 
             return Ok(accessToken);
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<ActionResult<string>> Profile()
+        {
+            var user = await _authService.GetCurrentUserProfileAsync();
+            if (user == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<UserViewModel>(user));
         }
     }
 }
